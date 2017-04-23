@@ -1,11 +1,10 @@
-
 # coding: utf-8
-from ps_utils import *
+from process import *
 from numpy import *
 import matplotlib.pyplot as plt
 
 
-I,mask,S = read_data_file("Buddha.mat")
+I,mask,S = read_data_file("Data/Buddha.mat")
 
 I_all = I.reshape(I.shape[0]*I.shape[1],10).T
 

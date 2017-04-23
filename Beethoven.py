@@ -1,9 +1,9 @@
 from numpy import *
-from ps_utils import *
+from processing import *
 import matplotlib.pyplot as plt 
 
 # read the .mat file
-I,mask,S = read_data_file("Beethoven.mat")
+I,mask,S = read_data_file("Data/Beethoven.mat")
 
 for i in range(I.shape[2]):
     plt.subplot(1,3,i+1)
