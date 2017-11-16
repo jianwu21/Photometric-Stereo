@@ -1,3 +1,4 @@
+# coding: utf-8
 from numpy import *
 from processing import *
 import matplotlib.pyplot as plt 

@@ -1,5 +1,5 @@
 # coding: utf-8
-from process import *
+from processing import *
 from numpy import *
 import matplotlib.pyplot as plt
 
@@ -34,3 +34,4 @@ display_depth_matplotlib(z)
 display_depth_mayavi(z)
 
 plt.imshow()
+

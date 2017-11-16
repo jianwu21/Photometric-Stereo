@@ -3,21 +3,6 @@
 ps_utils.py
 ------------
 
-Two methods of integration of a normal field to a depth function
-by solving a Poisson equation. 
-- The first, unbiased, implements a Poisson solver on an irregular domain.
-  rather standard approach.
-- The second implements the Simchony et al. method for integration of a normal
-  field.
- 
-They are port of Yvain Quéau's Matlab implementation to Python.
-See Yvain's code for more!
-
-Added to them, a function to read a dataset from a Matlab mat-file
-and a function to display a depth surface using Mayavi. 
-
-Author: Francois Lauze, University of Copenhagen
-Date December 2015 / January 2016
 """
 
 import numpy as np
@@ -176,21 +161,21 @@ def unbiased_integrate(n1, n2, n3, mask, order=2):
     z: numpy array
         array of size (m,n), with computed depth values inside the 
         make region (mask > 0) and NaN (Not a Number) in the region mask == 0.
-        
-        
-    It solves for the system comming from the discretization of 
-    
+
+
+    It solves for the system comming from the discretization of
+
            -Laplacian(z) - Divergence(n1/n3, n2/n3) = 0
-    
+
     with some boundary conditions, it gives a discretized Poisson system
         AZ = b
-    and z is obtained by mapping the values in Z to the region of the 2D image 
+    and z is obtained by mapping the values in Z to the region of the 2D image
     of size (m,n) where mask > 0. The rest of the z-image values are set to NaN.
     """
-    
+
     p = -n1/n3
-    q = -n2/n3        
-    
+    q = -n2/n3
+
     # Calculate some usefuk masks
     m,n = mask.shape
     Omega = np.zeros((m,n,4))
@@ -200,20 +185,20 @@ def unbiased_integrate(n1, n2, n3, mask, order=2):
     Omega[:,:,2] = Omega_padded[1:-1,2:]*mask
     Omega[:,:,3] = Omega_padded[1:-1,:-2]*mask
     del Omega_padded
-    
+
     # Mapping    
     indices_mask = np.where(mask > 0)
     lidx = len(indices_mask[0])
     mapping_matrix = np.zeros(p.shape, dtype=int)
     mapping_matrix[indices_mask] = xrange(lidx)
-    
+
     if order == 1:
         pbar = p.copy()
         qbar = q.copy()
     elif order == 2:
         pbar = 0.5*(p + p[range(1,m) + [m-1], :])
         qbar = 0.5*(q + q[:, range(1,n) + [n-1]])
-        
+
     # System
     I = []
     J = []
@@ -235,8 +220,7 @@ def unbiased_integrate(n1, n2, n3, mask, order=2):
     I += tolist(I_center) + tolist(I_center)
     J += tolist(I_center) + tolist(I_neighbors)
     b[I_center] -= qbar[(X,Y)]
-    
-	
+
     #	In mask, left neighbor in mask
     lset = Omega[:,:,3]
     X, Y = np.where(lset > 0)
@@ -249,7 +233,7 @@ def unbiased_integrate(n1, n2, n3, mask, order=2):
     A_neighbors = -A_center
     K += tolist(A_center) + tolist(A_neighbors)
     I += tolist(I_center) + tolist(I_center)
-    J += tolist(I_center) + tolist(I_neighbors)  
+    J += tolist(I_center) + tolist(I_neighbors)
     b[I_center] += qbar[(X,Y-1)]
 
 
@@ -283,14 +267,13 @@ def unbiased_integrate(n1, n2, n3, mask, order=2):
     I += tolist(I_center) + tolist(I_center)
     J += tolist(I_center) + tolist(I_neighbors)
     b[I_center] -= pbar[(X,Y)]
-    
+
     # Construction de A : 
     A = sp.csc_matrix((K, (I, J)))
     A = A + sp.eye(A.shape[0])*1e-9
     z = np.nan*np.ones(mask.shape)
     z[indices_mask] = spsolve(A, b)
     return z
-    
 
 
 def display_depth_mayavi(z):
@@ -301,22 +284,22 @@ def display_depth_mayavi(z):
     from mayavi import mlab
     m, n = z.shape
     x, y = np.mgrid[0:m, 0:n]
-    
+
     surf = mlab.mesh(x, y, z, colormap="gray")
     mlab.view(azimuth=0, elevation=90)
     surf.actor.property.interpolation = 'phong'
     surf.actor.property.specular = 0.1
     surf.actor.property.specular_power = 5
     mlab.show()
-    
-    
+
+
 def display_depth_matplotlib(z):
     """
     Same as above but using matplotlib instead.
     """
     from mpl_toolkits.mplot3d import Axes3D
     from matplotlib.colors import LightSource
-    
+
     m, n = z.shape
     x, y = np.mgrid[0:m, 0:n]
     fig = plt.figure()
@@ -329,17 +312,14 @@ def display_depth_matplotlib(z):
     plt.show()
 
 
-
-    
 def display_image(u):
     """
     Display a 2D imag
     """
     plt.imshow(u)
     plt.show()
-    
-    
-    
+
+
 def read_data_file(filename):
     """
     Read a matlab PS data file and returns
