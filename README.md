@@ -60,3 +60,9 @@ emitting from left, centre, and right, thus we have 3 types of images by light
 angle, [0,1,2,3],[4,5],[6,7,8,9], thus 4 x 2 x 4 = 32 choices. Since finding z
 value for all choices and creating a 3-d rendering is very slow, we calculated
 all possible z values and produced a contour map, which is a much faster process. Eventually we chose [1,4,7] for the equation.
+
+<img src='/src/Figure_1im.png'>
+
+<img src='/src/Figure_2im.png' width='500'>
+
+<img src='/src/Figure_3im.png' width='500'>
