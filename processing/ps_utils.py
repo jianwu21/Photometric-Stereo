@@ -12,6 +12,11 @@ from scipy.sparse.linalg import spsolve
 from scipy.io import loadmat
 from matplotlib import pyplot as plt
 
+try:
+    xrange
+except NameError:
+    xrange = range
+
 def cdx(f):
     """
     central differences for f-
@@ -196,8 +201,8 @@ def unbiased_integrate(n1, n2, n3, mask, order=2):
         pbar = p.copy()
         qbar = q.copy()
     elif order == 2:
-        pbar = 0.5*(p + p[range(1,m) + [m-1], :])
-        qbar = 0.5*(q + q[:, range(1,n) + [n-1]])
+        pbar = 0.5*(p + p[list(range(1,m)) + [m-1], :])
+        qbar = 0.5*(q + q[:, list(range(1,n)) + [n-1]])
 
     # System
     I = []

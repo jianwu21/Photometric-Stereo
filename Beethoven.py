@@ -1,17 +1,18 @@
 # coding: utf-8
 from numpy import *
 from processing import *
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
 
 # read the .mat file
-I,mask,S = read_data_file("Data/Beethoven.mat")
+I, mask, S = read_data_file("Data/Beethoven.mat")
 
 for i in range(I.shape[2]):
-    plt.subplot(1,3,i+1)
-    plt.imshow(I[:,:,i],cmap = plt.cm.gray)
+    plt.subplot(1, 3, i+1)
+    plt.imshow(I[:, :, i], cmap = plt.cm.gray)
     plt.axis('off')
 
-I_all = vstack((I[:,:,0].flatten(),I[:,:,1].flatten(),I[:,:,2].flatten()))
+I_all = vstack(
+    (I[:,:,0].flatten(), I[:,:,1].flatten(), I[:,:,2].flatten()))
 
 M = linalg.inv(S).dot(I_all)
 M_1 = M[0]

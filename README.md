@@ -9,7 +9,7 @@ camera angle but with varying light angles. According to Lambert’s law, for a 
 
 <img src='/src/1.png' width='400'>
 
-Where I is the vector of k observed intensities, S is the known 3 x k matrix of normalized light directions, and M is the surface normal that we need. The
+Where I is the vector of k observed intensities, S is the known k x 3 matrix of normalized light directions, and M is the surface normal that we need. The
 algorithms is then for each (valid) pixel [u, v] in image domain, solve m(u, v)
 via Moore-Penrose pseudoinverse or equation selection. Then we get the albedo and normal with the following equation:
 
